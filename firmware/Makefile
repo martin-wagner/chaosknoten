@@ -10,7 +10,8 @@ HFUSE := 0xDF
 EFUSE := 0xFF
 LOCK := 0xFC
 
-PROGRAMMER := avrisp2
+#PROGRAMMER := avrisp2
+PROGRAMMER := usbasp
 CONNECTION := usb
 DEVICE := t2313
 
@@ -58,9 +59,9 @@ prog_fuses: Makefile
 	                   -U efuse:w:$(EFUSE):m
 
 prog: $(NAME).hex Makefile
-	$(AVRDUDE_CALL) -u -e
-	$(AVRDUDE_CALL) -u -U flash:w:$(NAME).hex
-	$(AVRDUDE_CALL) -u -V -U lock:w:$(LOCK):m
+	$(AVRDUDE_CALL) -B 5 -u -e
+	$(AVRDUDE_CALL) -B 5 -u -U flash:w:$(NAME).hex
+	$(AVRDUDE_CALL) -B 5 -u -V -U lock:w:$(LOCK):m
 
 prog_auto: $(NAME).hex Makefile
 	while ! $(MAKE) prog_fuses || ! $(MAKE) prog; do echo -n; done
